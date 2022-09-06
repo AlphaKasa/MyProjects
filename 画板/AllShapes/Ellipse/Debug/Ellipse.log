@@ -1,7 +1,0 @@
-﻿  Ellipse.cpp
-F:\工作\画板\Ellipse\Ellipse.h(60,21): warning C4474: fprintf: 格式字符串中传递的参数太多
-F:\工作\画板\Ellipse\Ellipse.h(60,21): message : 占位符和其参数预计 0 可变参数，但提供的却是 1 参数
-F:\工作\画板\Ellipse\Ellipse.h(93,18): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-F:\工作\画板\Ellipse\Ellipse.h(116,18): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-    正在创建库 F:\工作\画板\Ellipse\Debug\ELLIPSE.lib 和对象 F:\工作\画板\Ellipse\Debug\ELLIPSE.exp
-  Ellipse.vcxproj -> F:\工作\画板\Ellipse\Debug\ELLIPSE.dll
