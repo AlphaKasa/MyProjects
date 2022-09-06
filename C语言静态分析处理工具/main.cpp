@@ -12,32 +12,32 @@ string KEYWORD[32] = {                   //1-32
     "switch", "typedef", "union", "unsigned", "for",
     "do", "while"
 };
-string DANGER_FUC[4] = {  //201¿ªÊ¼ 201£ºgets 202:strcpy
+string DANGER_FUC[4] = {  //201å¼€å§‹ 201ï¼šgets 202:strcpy
     "gets","strcpy","scanf","strcat"
 };
 
-char SEPARATER[8] = { ';',',','{','}','[',']','(',')' };  //·Ö¸ô·û  51-60
-char OPERATOR[8] = { '+','-','*','/','>','<','=','!' };   //ÔËËã·û  61-70
-char FILTER[4] = { ' ','\t','\r','\n' };          //¹ıÂË·û
+char SEPARATER[8] = { ';',',','{','}','[',']','(',')' };  //åˆ†éš”ç¬¦  51-60
+char OPERATOR[8] = { '+','-','*','/','>','<','=','!' };   //è¿ç®—ç¬¦  61-70
+char FILTER[4] = { ' ','\t','\r','\n' };          //è¿‡æ»¤ç¬¦
 const int dangerfucNum = 4;
 const int keywordNum = 32;
-const int CONSTANT = 100;      //³£ÊıÖµ
-const int IDENTIFIER_v = 101;     //±êÊ¶·û-±äÁ¿
-const int IDENTIFIER_f = 102;     //±êÊ¶·û-º¯Êı
-const int FILTER_VALUE = 103;    //¹ıÂË×Ö·ûÖµ
+const int CONSTANT = 100;      //å¸¸æ•°å€¼
+const int IDENTIFIER_v = 101;     //æ ‡è¯†ç¬¦-å˜é‡
+const int IDENTIFIER_f = 102;     //æ ‡è¯†ç¬¦-å‡½æ•°
+const int FILTER_VALUE = 103;    //è¿‡æ»¤å­—ç¬¦å€¼
 
 //bool in_fuc = false;
-int state = 0;  //×´Ì¬ 1:±êÊ¶·û³öÏÖ 
-                       //11:1µÄ×´Ì¬ÏÂ£¬ÏÂ¸ö×Ö·ûÎª¡®£¨¡¯£¬´ËÊ±£¨11£©ËµÃ÷±êÊ¶·ûÎªº¯Êı 
-                           //111:11µÄ×´Ì¬ÏÂ£¬³öÏÖ ¡®)¡¯ 
-                                //1111:111µÄ×´Ì¬ÏÂ£¬ÏÂ¸ö×Ö·ûÎª¡®{¡¯ £¬´ËÊ±£¨1111£©ËµÃ÷º¯ÊıÎªÉùÃ÷×´Ì¬,ÖÃin_fuc=true *** Ö®ºó¿´ÆäÖĞÊÇ·ñÓĞ¹ı´ó¾Ö²¿±äÁ¿£¬»ò¶àÖØµİ¹é
-                                //1112:111µÄ×´Ì¬ÏÂ£¬ÏÂ¸ö×Ö·û²»ÊÇ ¡®{¡¯£¬£¨¿ÉÄÜÎªÔËËã·û£¬À¨ºÅ»ò£»),´ËÊ±ËµÃ÷º¯ÊıÎªµ÷ÓÃ×´Ì¬ *** ÅĞ¶ÏÆäÊÇ·ñÎªÌØÊâº¯Êı£¬ÈôÊÇ¾ÍĞŞ¸Ä£¬²»ÊÇ¿´in_fucÊÇ·ñÎªtrue£¬ÈôÊÇ£¬¿´ÊÇ·ñÎªµİ¹é
-                      //12:ËµÃ÷±êÊ¶·ûÎª±äÁ¿£¬´ËÊ±¿´in_fucÊÇ·ñÎªtrue,ÈôÊÇ£¬¿´ÏÂ¸öÓĞĞ§×Ö·ûÊÇ·ñÎª[
-//float last_num; //³öÏÖÔËËãÊ±£¬¼ÇÂ¼Ç°Ò»¸öÊı×Ö
-//string last_identifier; //¼ÇÂ¼ÉÏÒ»¸ö±êÊ¶·û£¬ÈôÎªÖ®ºó²éÃ÷ÆäÎªº¯Êı£¬ÔòÅĞ¶ÏÆäÊÇ·ñÎª±ê¼Çº¯Êı
+int state = 0;  //çŠ¶æ€ 1:æ ‡è¯†ç¬¦å‡ºç° 
+                       //11:1çš„çŠ¶æ€ä¸‹ï¼Œä¸‹ä¸ªå­—ç¬¦ä¸ºâ€˜ï¼ˆâ€™ï¼Œæ­¤æ—¶ï¼ˆ11ï¼‰è¯´æ˜æ ‡è¯†ç¬¦ä¸ºå‡½æ•° 
+                           //111:11çš„çŠ¶æ€ä¸‹ï¼Œå‡ºç° â€˜)â€™ 
+                                //1111:111çš„çŠ¶æ€ä¸‹ï¼Œä¸‹ä¸ªå­—ç¬¦ä¸ºâ€˜{â€™ ï¼Œæ­¤æ—¶ï¼ˆ1111ï¼‰è¯´æ˜å‡½æ•°ä¸ºå£°æ˜çŠ¶æ€,ç½®in_fuc=true *** ä¹‹åçœ‹å…¶ä¸­æ˜¯å¦æœ‰è¿‡å¤§å±€éƒ¨å˜é‡ï¼Œæˆ–å¤šé‡é€’å½’
+                                //1112:111çš„çŠ¶æ€ä¸‹ï¼Œä¸‹ä¸ªå­—ç¬¦ä¸æ˜¯ â€˜{â€™ï¼Œï¼ˆå¯èƒ½ä¸ºè¿ç®—ç¬¦ï¼Œæ‹¬å·æˆ–ï¼›),æ­¤æ—¶è¯´æ˜å‡½æ•°ä¸ºè°ƒç”¨çŠ¶æ€ *** åˆ¤æ–­å…¶æ˜¯å¦ä¸ºç‰¹æ®Šå‡½æ•°ï¼Œè‹¥æ˜¯å°±ä¿®æ”¹ï¼Œä¸æ˜¯çœ‹in_fucæ˜¯å¦ä¸ºtrueï¼Œè‹¥æ˜¯ï¼Œçœ‹æ˜¯å¦ä¸ºé€’å½’
+                      //12:è¯´æ˜æ ‡è¯†ç¬¦ä¸ºå˜é‡ï¼Œæ­¤æ—¶çœ‹in_fucæ˜¯å¦ä¸ºtrue,è‹¥æ˜¯ï¼Œçœ‹ä¸‹ä¸ªæœ‰æ•ˆå­—ç¬¦æ˜¯å¦ä¸º[
+//float last_num; //å‡ºç°è¿ç®—æ—¶ï¼Œè®°å½•å‰ä¸€ä¸ªæ•°å­—
+//string last_identifier; //è®°å½•ä¸Šä¸€ä¸ªæ ‡è¯†ç¬¦ï¼Œè‹¥ä¸ºä¹‹åæŸ¥æ˜å…¶ä¸ºå‡½æ•°ï¼Œåˆ™åˆ¤æ–­å…¶æ˜¯å¦ä¸ºæ ‡è®°å‡½æ•°
 
 FILE* fpin, * fout;
-//ÅĞ¶ÏÊÇ·ñÎªÎ£ÏÕº¯Êı
+//åˆ¤æ–­æ˜¯å¦ä¸ºå±é™©å‡½æ•°
 int IsDangerFuc(string word) {
     for (int i = 0;i < dangerfucNum;i++) {
         if (DANGER_FUC[i] == word) {
@@ -47,7 +47,7 @@ int IsDangerFuc(string word) {
     return dangerfucNum + 1;
 }
 
-/**ÅĞ¶ÏÊÇ·ñÎª¹Ø¼ü×Ö**/ //arr
+/**åˆ¤æ–­æ˜¯å¦ä¸ºå…³é”®å­—**/ //arr
 int IsKeyword(string word) {
     for (int i = 0;i < keywordNum;i++) {
         if (KEYWORD[i] == word) {
@@ -58,7 +58,7 @@ int IsKeyword(string word) {
 }
 
 
-/**ÅĞ¶ÏÊÇ·ñÎª·Ö¸ô·û**/
+/**åˆ¤æ–­æ˜¯å¦ä¸ºåˆ†éš”ç¬¦**/
 int IsSeparater(char ch) {
     for (int i = 0;i < 8;i++) {
         if (SEPARATER[i] == ch) {
@@ -68,7 +68,7 @@ int IsSeparater(char ch) {
     return 0;
 }
 
-/**ÅĞ¶ÏÊÇ·ñÎªÔËËã·û**/
+/**åˆ¤æ–­æ˜¯å¦ä¸ºè¿ç®—ç¬¦**/
 int IsOperator(char ch) {
     for (int i = 0;i < 8;i++) {
         if (OPERATOR[i] == ch) {
@@ -77,7 +77,7 @@ int IsOperator(char ch) {
     }
     return 0;
 }
-/**ÅĞ¶ÏÊÇ·ñÎª¹ıÂË·û**/
+/**åˆ¤æ–­æ˜¯å¦ä¸ºè¿‡æ»¤ç¬¦**/
 bool IsFilter(char ch) {
     for (int i = 0;i < 4;i++) {
         if (FILTER[i] == ch) {
@@ -86,22 +86,22 @@ bool IsFilter(char ch) {
     }
     return false;
 }
-/**ÅĞ¶ÏÊÇ·ñÎª´óĞ´×ÖÄ¸**/
+/**åˆ¤æ–­æ˜¯å¦ä¸ºå¤§å†™å­—æ¯**/
 bool IsUpLetter(char ch) {
     if (ch >= 'A' && ch <= 'Z') return true;
     return false;
 }
-/**ÅĞ¶ÏÊÇ·ñÎªĞ¡Ğ´×ÖÄ¸**/
+/**åˆ¤æ–­æ˜¯å¦ä¸ºå°å†™å­—æ¯**/
 bool IsLowLetter(char ch) {
     if (ch >= 'a' && ch <= 'z') return true;
     return false;
 }
-/**ÅĞ¶ÏÊÇ·ñÎªÊı×Ö**/
+/**åˆ¤æ–­æ˜¯å¦ä¸ºæ•°å­—**/
 bool IsDigit(char ch) {
     if (ch >= '0' && ch <= '9') return true;
     return false;
 }
-/**·µ»ØÃ¿¸ö×ÖµÄÖµ**/
+/**è¿”å›æ¯ä¸ªå­—çš„å€¼**/
 template <class T>
 int value(T* a, int n, T str) {
     for (int i = 0;i < n;i++) {
@@ -110,7 +110,7 @@ int value(T* a, int n, T str) {
     return -1;
 }
 
-bool fuc_state(FILE* fpin) { //ÅĞ¶Ïº¯Êı×´Ì¬£¬ÉùÃ÷orµ÷ÓÃ ¸ñ×ÓÍË»Ø
+bool fuc_state(FILE* fpin) { //åˆ¤æ–­å‡½æ•°çŠ¶æ€ï¼Œå£°æ˜orè°ƒç”¨ æ ¼å­é€€å›
     int left = 1;
     int right = 0;
     char ch;
@@ -124,21 +124,21 @@ bool fuc_state(FILE* fpin) { //ÅĞ¶Ïº¯Êı×´Ì¬£¬ÉùÃ÷orµ÷ÓÃ ¸ñ×ÓÍË»Ø
         else if (ch == ')')
             right++;
     }
-    //ÓÒÀ¨ºÅ½áÊø£¬¿´ÏÂÒ»¸ö×Ö·û
+    //å³æ‹¬å·ç»“æŸï¼Œçœ‹ä¸‹ä¸€ä¸ªå­—ç¬¦
     ch = fgetc(fpin);
     posi++;
     while (IsFilter(ch)) {
         ch = fgetc(fpin);
         posi++;
     }
-    fseek(fpin, -posi, SEEK_CUR); //¸ñ×ÓÍË»Ø£ºº¯ÊıÃûµ½ { Ö®¼äµÄÄÚÈİ¼ÌĞø´¦Àí¡£ 
+    fseek(fpin, -posi, SEEK_CUR); //æ ¼å­é€€å›ï¼šå‡½æ•°ååˆ° { ä¹‹é—´çš„å†…å®¹ç»§ç»­å¤„ç†ã€‚ 
     if (ch == '{') {
         return true;
     } 
     return false;
 }
 
-int deal_formula(string formula) {  // ´«ÈëµÄÊÇÎŞ¹ıÂË·ûµÄËãÊ½×Ö·û´®£¬¸ñ×Ó²»ÍË»Ø
+int deal_formula(string formula) {  // ä¼ å…¥çš„æ˜¯æ— è¿‡æ»¤ç¬¦çš„ç®—å¼å­—ç¬¦ä¸²ï¼Œæ ¼å­ä¸é€€å›
     int len = formula.size();
     string arr = "";
     for (int i = 0;i < len;i++) {
@@ -153,21 +153,21 @@ int deal_formula(string formula) {  // ´«ÈëµÄÊÇÎŞ¹ıÂË·ûµÄËãÊ½×Ö·û´®£¬¸ñ×Ó²»ÍË»Ø
     }
     return 300;
 }
-int deal_nokh_formula(string formula) { //ÎŞÀ¨ºÅÎŞĞ¡Êıµã 1+2*3-4/5
+int deal_nokh_formula(string formula) { //æ— æ‹¬å·æ— å°æ•°ç‚¹ 1+2*3-4/5
     int len = formula.size();
     string arr = "";
     vector<int> number;
     vector<char> symbol;
 
-    for (int i = 0;i < len;i++) {  //´¦Àí¹ıºó£¬Ö»Ê£¼Ó¼õ·¨
+    for (int i = 0;i < len;i++) {  //å¤„ç†è¿‡åï¼Œåªå‰©åŠ å‡æ³•
         if (IsDigit(formula[i]) && i != len - 1) {
             arr += formula[i];          
         }
-        else { //Ñ¹ÈëÊı£¬²¢¿´ÊÇ·ñÊÇ³Ë³ıÔËËã
-            if (i == len - 1) {  //µ½½áÎ²£¬ËµÃ÷formula[i]ÊÇÊı×Ö
+        else { //å‹å…¥æ•°ï¼Œå¹¶çœ‹æ˜¯å¦æ˜¯ä¹˜é™¤è¿ç®—
+            if (i == len - 1) {  //åˆ°ç»“å°¾ï¼Œè¯´æ˜formula[i]æ˜¯æ•°å­—
                 arr += formula[i];           
             }
-            number.push_back(atoi(arr.c_str())); //Ñ¹ÈëÊı
+            number.push_back(atoi(arr.c_str())); //å‹å…¥æ•°
            
             if (!symbol.empty()&&(symbol.back() == '*' || symbol.back() == '/')) {
                 int a, b;
@@ -184,7 +184,7 @@ int deal_nokh_formula(string formula) { //ÎŞÀ¨ºÅÎŞĞ¡Êıµã 1+2*3-4/5
                 symbol.pop_back();
             }
 
-            if (i != len - 1) { //²»µ½½áÎ²£¬ËµÃ÷formula[i]ÊÇ×Ö·û
+            if (i != len - 1) { //ä¸åˆ°ç»“å°¾ï¼Œè¯´æ˜formula[i]æ˜¯å­—ç¬¦
                 symbol.push_back(formula[i]);
             }
          
@@ -208,31 +208,31 @@ int deal_nokh_formula(string formula) { //ÎŞÀ¨ºÅÎŞĞ¡Êıµã 1+2*3-4/5
     return sum;
 }
 
-/**´Ê·¨·ÖÎö**/
+/**è¯æ³•åˆ†æ**/
 void analyse(FILE* fpin) {
-    int arr_num = 0; //¹Ø¼ü×ÖÊı×Ö
-    int ch_num = 0; //×Ö·ûÊı×Ö
-    int dangerf_num = 0; //Î£ÏÕº¯ÊıÊı×Ö
+    int arr_num = 0; //å…³é”®å­—æ•°å­—
+    int ch_num = 0; //å­—ç¬¦æ•°å­—
+    int dangerf_num = 0; //å±é™©å‡½æ•°æ•°å­—
 
     char ch = ' ';
-    string arr = "";  //±£´æÒ»¸ö¹Ø¼ü×Ö»ò±êÊ¶·û
-    string filter_str = ""; //±£´æÒ»¶Î¹ıÂË·û
+    string arr = "";  //ä¿å­˜ä¸€ä¸ªå…³é”®å­—æˆ–æ ‡è¯†ç¬¦
+    string filter_str = ""; //ä¿å­˜ä¸€æ®µè¿‡æ»¤ç¬¦
 
-    bool in_fuc = false; //ÊÇ·ñÔÚº¯ÊıÖĞ
-    string in_fuc_name = ""; //µ±Ç°ËùÔÚº¯ÊıÃû×Ö£¬ÓÃÓÚÅĞ¶ÏÊÇ·ñÓĞµİ¹é
-    int left_kh_num = 0; //´óÀ¨ºÅ£¬¼ì²âº¯ÊıÊÇ·ñ½áÊø
+    bool in_fuc = false; //æ˜¯å¦åœ¨å‡½æ•°ä¸­
+    string in_fuc_name = ""; //å½“å‰æ‰€åœ¨å‡½æ•°åå­—ï¼Œç”¨äºåˆ¤æ–­æ˜¯å¦æœ‰é€’å½’
+    int left_kh_num = 0; //å¤§æ‹¬å·ï¼Œæ£€æµ‹å‡½æ•°æ˜¯å¦ç»“æŸ
     int right_kh_num = 0; 
 
-    bool in_state = false; //ÊÇ·ñÔÚchar intµÈÉùÃ÷×´Ì¬£¬µ½³öÏÖ;½áÊø¡£ ÓÃÓÚ¼ÇÂ¼¿ÉÄÜ³öÏÖµÄÖ¸ÕëÃû×Ö
+    bool in_state = false; //æ˜¯å¦åœ¨char intç­‰å£°æ˜çŠ¶æ€ï¼Œåˆ°å‡ºç°;ç»“æŸã€‚ ç”¨äºè®°å½•å¯èƒ½å‡ºç°çš„æŒ‡é’ˆåå­—
     bool in_state_p = false;
     vector<string> pointer;
     vector<string> pointer_pname;
 
-    int left_xkh_num = 0;//Ğ¡À¨ºÅ£¬¼ì²â
+    int left_xkh_num = 0;//å°æ‹¬å·ï¼Œæ£€æµ‹
     int right_xkh_num = 0;
 
-    string last_state;//¼ÇÂ¼ÉÏ¸öÉùÃ÷ÀàĞÍ£¬int char µÈµÈ... ÓÃÓÚ°ÑÕ»ÄÚÈİ×ªµ½¶ÑÉÏÊ±£¬×Ö·û´®ºóÌí¼ÓÉùÃ÷£ºint a[2000]-->int *a=new int[2000]
-    vector<string> shift_var_name; //¼ÇÂ¼µ±Ç°º¯ÊıËùÓĞ±»×ªÒÆµ½¶ÑÉÏµÄ±äÁ¿£¬ÓÃÓÚreturnÇ°½«Æädelete
+    string last_state;//è®°å½•ä¸Šä¸ªå£°æ˜ç±»å‹ï¼Œint char ç­‰ç­‰... ç”¨äºæŠŠæ ˆå†…å®¹è½¬åˆ°å †ä¸Šæ—¶ï¼Œå­—ç¬¦ä¸²åæ·»åŠ å£°æ˜ï¼šint a[2000]-->int *a=new int[2000]
+    vector<string> shift_var_name; //è®°å½•å½“å‰å‡½æ•°æ‰€æœ‰è¢«è½¬ç§»åˆ°å †ä¸Šçš„å˜é‡ï¼Œç”¨äºreturnå‰å°†å…¶delete
     bool fuc_has_ret = false;
     while ((ch = fgetc(fpin)) != EOF) {
         arr = "";
@@ -240,28 +240,28 @@ void analyse(FILE* fpin) {
 
         if (IsFilter(ch)) {
             fprintf(fout, "%c", ch);
-        }       //ÅĞ¶ÏÊÇ·ñÎª¹ıÂË·û
+        }       //åˆ¤æ–­æ˜¯å¦ä¸ºè¿‡æ»¤ç¬¦
 
-        else if (IsLowLetter(ch)) {    //ÅĞ¶ÏÊÇ·ñÎª¹Ø¼ü×Ö
-            while (IsUpLetter(ch) || IsLowLetter(ch) || ch == '_'|| IsDigit(ch)) {  //´óĞ¡Ğ´£¬Êı×Ö£¬»ò_Ôò¼ÌĞø
+        else if (IsLowLetter(ch)) {    //åˆ¤æ–­æ˜¯å¦ä¸ºå…³é”®å­—
+            while (IsUpLetter(ch) || IsLowLetter(ch) || ch == '_'|| IsDigit(ch)) {  //å¤§å°å†™ï¼Œæ•°å­—ï¼Œæˆ–_åˆ™ç»§ç»­
                 arr += ch;
                 ch = fgetc(fpin);
             }
-            //µ½ÏÂ¸ö²»Îª¹ıÂË·ûµÄ×ÖÄ¸£¬µÃµ½Õû¸ötoken
-            fseek(fpin,-1L,SEEK_CUR); //ÍË»ØÒ»¸ñ£¬´ËÊ±µÃµ½µÄÎªÒ»´®Ğ¡Ğ´×ÖÄ¸
+            //åˆ°ä¸‹ä¸ªä¸ä¸ºè¿‡æ»¤ç¬¦çš„å­—æ¯ï¼Œå¾—åˆ°æ•´ä¸ªtoken
+            fseek(fpin,-1L,SEEK_CUR); //é€€å›ä¸€æ ¼ï¼Œæ­¤æ—¶å¾—åˆ°çš„ä¸ºä¸€ä¸²å°å†™å­—æ¯
             arr_num = IsKeyword(arr);
 
-            if (arr_num <= keywordNum) {  //±êÊ¶·ûÎª¹Ø¼ü×Ö
-                //1 cout << arr_num << " " << arr << " ¹Ø¼ü×Ö" << endl;            //Êı×Ö×¢ÊÍ£¬±íÊ¾×¢ÊÍµôÆÁÄ»ÉÏ·Ç¹Ø¼üĞÅÏ¢,Ö»±£Áô³ÌĞòĞŞ¸ÄÄÚÈİ
+            if (arr_num <= keywordNum) {  //æ ‡è¯†ç¬¦ä¸ºå…³é”®å­—
+                //1 cout << arr_num << " " << arr << " å…³é”®å­—" << endl;            //æ•°å­—æ³¨é‡Šï¼Œè¡¨ç¤ºæ³¨é‡Šæ‰å±å¹•ä¸Šéå…³é”®ä¿¡æ¯,åªä¿ç•™ç¨‹åºä¿®æ”¹å†…å®¹
                 
-                if (arr_num <= 6) {  //¼ÇÂ¼ÉùÃ÷ÀàĞÍint char..  ÓÃÓÚºóÃæÕ»ÒÆ¶Ñ
+                if (arr_num <= 6) {  //è®°å½•å£°æ˜ç±»å‹int char..  ç”¨äºåé¢æ ˆç§»å †
                     last_state = arr.c_str();
                     in_state = true;
                 }
               
-                else if (arr_num == 20) { //return,ÔÚĞ´ÈëreturnÖ®Ç°ÏÈdeleteËùÓĞ¶ÑÉÏ±äÁ¿
-                    fuc_has_ret = true; //º¯ÊıÓĞreturn
-                    if (shift_var_name.size() >= 1) {   //todoÒòÎª¸ñÊ½ÎÊÌâĞ´µÄºÜ¸´ÔÓ£¬ÇÒÎª´¦ÀíÃ»returnÊ±µÄdelete
+                else if (arr_num == 20) { //return,åœ¨å†™å…¥returnä¹‹å‰å…ˆdeleteæ‰€æœ‰å †ä¸Šå˜é‡
+                    fuc_has_ret = true; //å‡½æ•°æœ‰return
+                    if (shift_var_name.size() >= 1) {   //todoå› ä¸ºæ ¼å¼é—®é¢˜å†™çš„å¾ˆå¤æ‚ï¼Œä¸”ä¸ºå¤„ç†æ²¡returnæ—¶çš„delete
                         fprintf(fout, "%s", "delete[]");
                         fprintf(fout, "%s", shift_var_name[0].c_str());
                         fprintf(fout, "%c\n", ';');
@@ -276,28 +276,28 @@ void analyse(FILE* fpin) {
                 }               
                 fprintf(fout, "%s", arr.c_str());
             }
-            else //±êÊ¶·ûÎª±äÁ¿»òº¯Êı »òÖ¸Õë
+            else //æ ‡è¯†ç¬¦ä¸ºå˜é‡æˆ–å‡½æ•° æˆ–æŒ‡é’ˆ
             {
-                ch = fgetc(fpin); //³ÖĞøµ½ÏÂ¸ö²»Îª¹ıÂË·ûµÄ×ÖÄ¸
+                ch = fgetc(fpin); //æŒç»­åˆ°ä¸‹ä¸ªä¸ä¸ºè¿‡æ»¤ç¬¦çš„å­—æ¯
                 while (IsFilter(ch)) {
                     filter_str += ch;
                     ch = fgetc(fpin);
                 }
-                //cout << endl << "µ±Ç°²»Îª¹ıÂË·ûµÄ×Ö·ûÎª£º" << ch << endl;
-                if (ch == '(') {  //±êÊ¶·ûÎªº¯Êı
+                //cout << endl << "å½“å‰ä¸ä¸ºè¿‡æ»¤ç¬¦çš„å­—ç¬¦ä¸ºï¼š" << ch << endl;
+                if (ch == '(') {  //æ ‡è¯†ç¬¦ä¸ºå‡½æ•°
                     //state = 11; 
                     dangerf_num = IsDangerFuc(arr);
-                    if (dangerf_num <= dangerfucNum) { //ÈôÊÇÎ£ÏÕº¯Êı£¬±ØÎªµ÷ÓÃ 1:gets 2:strcpy
-                        cout << IDENTIFIER_v << " " << arr << " ±êÊ¶·û-º¯Êı(Î£ÏÕ£©" ; //Î£ÏÕº¯Êı±ØÎªµ÷ÓÃ£¬ËùÒÔºóÃæÊÇÀ¨ºÅ
+                    if (dangerf_num <= dangerfucNum) { //è‹¥æ˜¯å±é™©å‡½æ•°ï¼Œå¿…ä¸ºè°ƒç”¨ 1:gets 2:strcpy
+                        cout << IDENTIFIER_v << " " << arr << " æ ‡è¯†ç¬¦-å‡½æ•°(å±é™©ï¼‰" ; //å±é™©å‡½æ•°å¿…ä¸ºè°ƒç”¨ï¼Œæ‰€ä»¥åé¢æ˜¯æ‹¬å·
 
-                        //arr += ch; //º¯ÊıÃû×Ö·û´®¼ÓÉÏ£¨ £¬¼´Ö±½Ó´¦Àíµ½º¯ÊıºóÃæµÄ£©
+                        //arr += ch; //å‡½æ•°åå­—ç¬¦ä¸²åŠ ä¸Šï¼ˆ ï¼Œå³ç›´æ¥å¤„ç†åˆ°å‡½æ•°åé¢çš„ï¼‰
                         left_xkh_num++;
-                        string identifier_inkh_name = ""; //¼ÇÂ¼Î£ÏÕº¯ÊıÄÚ±äÁ¿Ãû×Ö
+                        string identifier_inkh_name = ""; //è®°å½•å±é™©å‡½æ•°å†…å˜é‡åå­—
 
                         switch (dangerf_num) {
                             case 1:  //gets(s)-->fgets(s,sizeof(s),stdin)
                             {                               
-                                arr = "fgets("; //½«Ç°ÃæµÄarr="gets("  ¿ÉÄÜÓĞ¿Õ¸ñ£¬Ïû³ı¿Õ¸ñ£¬¸ÄÎªĞÂº¯Êı
+                                arr = "fgets("; //å°†å‰é¢çš„arr="gets("  å¯èƒ½æœ‰ç©ºæ ¼ï¼Œæ¶ˆé™¤ç©ºæ ¼ï¼Œæ”¹ä¸ºæ–°å‡½æ•°
                                 while(left_xkh_num != right_xkh_num) {
                                     ch = fgetc(fpin);
                                     identifier_inkh_name += ch;
@@ -308,7 +308,7 @@ void analyse(FILE* fpin) {
                                         right_xkh_num++;
                                     }
                                 }
-                                //µ½´Ëarr="fgets("
+                                //åˆ°æ­¤arr="fgets("
                                 // identifier_inkh_name = "s)"
                                 arr += identifier_inkh_name;
                                 identifier_inkh_name.erase(identifier_inkh_name.length() - 1, 1);
@@ -320,7 +320,7 @@ void analyse(FILE* fpin) {
                                 }
 
                                 arr.insert(arr.length() - 1, ",sizeof("+identifier_inkh_name+"),stdin");
-                                fseek(fpin, 1L, SEEK_CUR); //Ç°½øÒ»¸ñ£¬ÒòÎªÒÑ¾­°Ñ£©¶¼´¦ÀíÍêÁË£¬Ö®ºó»¹»áÍË»ØÒ»¸ñ£¬ËùÒÔÕâÀï±£³ÖÆ½ºâ
+                                fseek(fpin, 1L, SEEK_CUR); //å‰è¿›ä¸€æ ¼ï¼Œå› ä¸ºå·²ç»æŠŠï¼‰éƒ½å¤„ç†å®Œäº†ï¼Œä¹‹åè¿˜ä¼šé€€å›ä¸€æ ¼ï¼Œæ‰€ä»¥è¿™é‡Œä¿æŒå¹³è¡¡
                                 left_xkh_num = 0;
                                 right_xkh_num = 0;
 
@@ -339,7 +339,7 @@ void analyse(FILE* fpin) {
                                         right_xkh_num++;
                                     }
                                 }
-                                arr += ch; //arr¼ÓÉÏ¶ººÅ
+                                arr += ch; //arråŠ ä¸Šé€—å·
                                 while (left_xkh_num != right_xkh_num) {
                                     ch = fgetc(fpin);        
                                     arr += ch;
@@ -350,7 +350,7 @@ void analyse(FILE* fpin) {
                                         right_xkh_num++;
                                     }
                                 }
-                                //µ½´Ëarr="strcpy_s(s,s1)"
+                                //åˆ°æ­¤arr="strcpy_s(s,s1)"
                                 // identifier_inkh_name = "s"
                               
                                 for (int i = 0;i < pointer.size();i++) {
@@ -359,7 +359,7 @@ void analyse(FILE* fpin) {
                                     }
                                 }
                                 arr.insert(arr.find(",") + 1, "sizeof(" + identifier_inkh_name + "),");
-                                fseek(fpin, 1L, SEEK_CUR); //Ç°½øÒ»¸ñ£¬ÒòÎªÒÑ¾­°Ñ£©¶¼´¦ÀíÍêÁË£¬Ö®ºó»¹»áÍË»ØÒ»¸ñ£¬ËùÒÔÕâÀï±£³ÖÆ½ºâ
+                                fseek(fpin, 1L, SEEK_CUR); //å‰è¿›ä¸€æ ¼ï¼Œå› ä¸ºå·²ç»æŠŠï¼‰éƒ½å¤„ç†å®Œäº†ï¼Œä¹‹åè¿˜ä¼šé€€å›ä¸€æ ¼ï¼Œæ‰€ä»¥è¿™é‡Œä¿æŒå¹³è¡¡
                                 left_xkh_num = 0;
                                 right_xkh_num = 0;
 
@@ -377,11 +377,11 @@ void analyse(FILE* fpin) {
                                         right_xkh_num++;
                                     }
                                 }
-                                arr += ch; //arr¼ÓÉÏ&
+                                arr += ch; //arråŠ ä¸Š&
                               
                                 while (left_xkh_num != right_xkh_num) {                                  
                                     ch = fgetc(fpin);
-                                    identifier_inkh_name += ch; //Ğ´ÔÚch = fgetc(fpin)ºó£¬ÒòÎª²»¼Ó&
+                                    identifier_inkh_name += ch; //å†™åœ¨ch = fgetc(fpin)åï¼Œå› ä¸ºä¸åŠ &
                                     arr += ch;
                                     if (ch == '(') {
                                         left_xkh_num++;
@@ -390,10 +390,10 @@ void analyse(FILE* fpin) {
                                         right_xkh_num++;
                                     }
                                 }
-                                //µ½´Ëarr="scanf_s("s%",&s)"
+                                //åˆ°æ­¤arr="scanf_s("s%",&s)"
                                 // identifier_inkh_name = "s)"
-                                arr.erase(arr.length() - 1, 1); //É¾È¥ÓÒÀ¨ºÅ
-                                identifier_inkh_name.erase(identifier_inkh_name.length() - 1, 1); //É¾È¥ÓÒÀ¨ºÅ     
+                                arr.erase(arr.length() - 1, 1); //åˆ å»å³æ‹¬å·
+                                identifier_inkh_name.erase(identifier_inkh_name.length() - 1, 1); //åˆ å»å³æ‹¬å·     
 
                                 for (int i = 0;i < pointer.size();i++) {
                                     if (pointer[i].compare(identifier_inkh_name) == 0) {
@@ -402,13 +402,13 @@ void analyse(FILE* fpin) {
                                 }
 
                                 arr += ",sizeof(" + identifier_inkh_name + "))";
-                                fseek(fpin, 1L, SEEK_CUR); //Ç°½øÒ»¸ñ£¬ÒòÎªÒÑ¾­°Ñ£©¶¼´¦ÀíÍêÁË£¬Ö®ºó»¹»áÍË»ØÒ»¸ñ£¬ËùÒÔÕâÀï±£³ÖÆ½ºâ
+                                fseek(fpin, 1L, SEEK_CUR); //å‰è¿›ä¸€æ ¼ï¼Œå› ä¸ºå·²ç»æŠŠï¼‰éƒ½å¤„ç†å®Œäº†ï¼Œä¹‹åè¿˜ä¼šé€€å›ä¸€æ ¼ï¼Œæ‰€ä»¥è¿™é‡Œä¿æŒå¹³è¡¡
                                 left_xkh_num = 0;
                                 right_xkh_num = 0;
 
                                 break;
                             }
-                            case 4:  //strcpy(s,s1)-->strncpy(s,s1,sizeof(s)-length(s)-1)  //ÕâÀïÓÃlengthÒòÎª
+                            case 4:  //strcpy(s,s1)-->strncpy(s,s1,sizeof(s)-length(s)-1)  //è¿™é‡Œç”¨lengthå› ä¸º
                             {
                                 arr = "strcat_s(";
                                 while ((ch = fgetc(fpin)) != ',') {
@@ -421,7 +421,7 @@ void analyse(FILE* fpin) {
                                         right_xkh_num++;
                                     }
                                 }
-                                arr += ch; //arr¼ÓÉÏ¶ººÅ
+                                arr += ch; //arråŠ ä¸Šé€—å·
                                 while (left_xkh_num != right_xkh_num) {
                                     ch = fgetc(fpin);
                                     arr += ch;
@@ -432,9 +432,9 @@ void analyse(FILE* fpin) {
                                         right_xkh_num++;
                                     }
                                 }
-                                //µ½´Ëarr="strcat_s(s,s1)"
+                                //åˆ°æ­¤arr="strcat_s(s,s1)"
                                 // identifier_inkh_name = "s"                              
-                                //arr.erase(arr.length() - 1, 1); //É¾È¥ÓÒÀ¨ºÅ                              
+                                //arr.erase(arr.length() - 1, 1); //åˆ å»å³æ‹¬å·                              
 
                                 for (int i = 0;i < pointer.size();i++) {
                                     if (pointer[i].compare(identifier_inkh_name) == 0) {
@@ -443,55 +443,55 @@ void analyse(FILE* fpin) {
                                 }
                                 arr.insert(arr.find(",") + 1, "sizeof(" + identifier_inkh_name + ") - strlen(" + identifier_inkh_name + ") - 1,");
                                 //arr += ",sizeof(" + identifier_inkh_name + ") - strlen(" + identifier_inkh_name + ") - 1)";
-                                fseek(fpin, 1L, SEEK_CUR); //Ç°½øÒ»¸ñ£¬ÒòÎªÒÑ¾­°Ñ£©¶¼´¦ÀíÍêÁË£¬Ö®ºó»¹»áÍË»ØÒ»¸ñ£¬ËùÒÔÕâÀï±£³ÖÆ½ºâ
+                                fseek(fpin, 1L, SEEK_CUR); //å‰è¿›ä¸€æ ¼ï¼Œå› ä¸ºå·²ç»æŠŠï¼‰éƒ½å¤„ç†å®Œäº†ï¼Œä¹‹åè¿˜ä¼šé€€å›ä¸€æ ¼ï¼Œæ‰€ä»¥è¿™é‡Œä¿æŒå¹³è¡¡
                                 left_xkh_num = 0;
                                 right_xkh_num = 0;
 
                                 break;
                             }
                         }
-                        cout << "  ; ÒÑĞŞ¸ÄÎª :" << arr << endl;
-                        fprintf(fout, "%s", arr.c_str());//arr´ËÊ±Îªº¯ÊıÃû+ÆäºóÀ¨ºÅÄÚÄÚÈİÖ±µ½£©
+                        cout << "  ; å·²ä¿®æ”¹ä¸º :" << arr << endl;
+                        fprintf(fout, "%s", arr.c_str());//arræ­¤æ—¶ä¸ºå‡½æ•°å+å…¶åæ‹¬å·å†…å†…å®¹ç›´åˆ°ï¼‰
                     }
-                    else {   //ÈôÊÇÆäËûº¯Êı£¬ÅĞ¶ÏÆäÎªÉùÃ÷»òÊÇµ÷ÓÃ
-                        if (fuc_state(fpin)) {  //º¯ÊıÉùÃ÷£¬³ÌĞò±äÎªº¯ÊıÄÚ×´Ì¬£¬´ËÊ±Òª¼ì²é±äÁ¿¿Õ¼ä´óĞ¡¡£²¢¼ÇÂ¼º¯ÊıÃû£¬ÎªÖ®ºó¼ì²éÄÚ²¿ÊÇ·ñÓĞµİ¹é×ö×¼±¸¡£
-                            cout << IDENTIFIER_v << " " << arr << " ±êÊ¶·û-º¯Êı(°²È«£©-ÉùÃ÷×´Ì¬" << endl; //º¯Êı
+                    else {   //è‹¥æ˜¯å…¶ä»–å‡½æ•°ï¼Œåˆ¤æ–­å…¶ä¸ºå£°æ˜æˆ–æ˜¯è°ƒç”¨
+                        if (fuc_state(fpin)) {  //å‡½æ•°å£°æ˜ï¼Œç¨‹åºå˜ä¸ºå‡½æ•°å†…çŠ¶æ€ï¼Œæ­¤æ—¶è¦æ£€æŸ¥å˜é‡ç©ºé—´å¤§å°ã€‚å¹¶è®°å½•å‡½æ•°åï¼Œä¸ºä¹‹åæ£€æŸ¥å†…éƒ¨æ˜¯å¦æœ‰é€’å½’åšå‡†å¤‡ã€‚
+                            cout << IDENTIFIER_v << " " << arr << " æ ‡è¯†ç¬¦-å‡½æ•°(å®‰å…¨ï¼‰-å£°æ˜çŠ¶æ€" << endl; //å‡½æ•°
                            // state=
                             //if (arr.compare("main") != 0) {
-                            in_fuc = true;  //½øÈëº¯Êı×´Ì¬ 
-                            in_fuc_name += arr; //¼ÇÂ¼´ËÊ±º¯ÊıÃû×Ö£¬ÓÃÓÚ¼ì²éÊÇ·ñÓĞµİ¹é
-                            fuc_has_ret = false; //º¯Êı¿ªÊ¼£¬ÏÈÉè¶¨ÎŞreturn
-                            cout << endl << "½øÈëº¯Êı:" << in_fuc_name << endl << endl;
+                            in_fuc = true;  //è¿›å…¥å‡½æ•°çŠ¶æ€ 
+                            in_fuc_name += arr; //è®°å½•æ­¤æ—¶å‡½æ•°åå­—ï¼Œç”¨äºæ£€æŸ¥æ˜¯å¦æœ‰é€’å½’
+                            fuc_has_ret = false; //å‡½æ•°å¼€å§‹ï¼Œå…ˆè®¾å®šæ— return
+                            cout << endl << "è¿›å…¥å‡½æ•°:" << in_fuc_name << endl << endl;
                             fprintf(fout, "%s", arr.c_str());
                             //}
                         }
-                        else {  //º¯Êıµ÷ÓÃ£¬¼ì²éÊÇ·ñ´æÔÚµİ¹é
-                            cout << IDENTIFIER_v << " " << arr << " ±êÊ¶·û-º¯Êı(°²È«£©-µ÷ÓÃ×´Ì¬ ;"; //º¯Êı
+                        else {  //å‡½æ•°è°ƒç”¨ï¼Œæ£€æŸ¥æ˜¯å¦å­˜åœ¨é€’å½’
+                            cout << IDENTIFIER_v << " " << arr << " æ ‡è¯†ç¬¦-å‡½æ•°(å®‰å…¨ï¼‰-è°ƒç”¨çŠ¶æ€ ;"; //å‡½æ•°
                             if (in_fuc) {
                                 if (in_fuc_name.compare(arr) == 0) {
-                                    cout << " ÄúµÄ³ÌĞòÖĞÊ¹ÓÃÁËµİ¹éº¯Êı£¬Çë×¢Òâ¼ì²éÊÇ·ñµİ¹é´ÎÊı¹ı¶à¡£";
+                                    cout << " æ‚¨çš„ç¨‹åºä¸­ä½¿ç”¨äº†é€’å½’å‡½æ•°ï¼Œè¯·æ³¨æ„æ£€æŸ¥æ˜¯å¦é€’å½’æ¬¡æ•°è¿‡å¤šã€‚";
                                     arr += ch;
                                     while ((ch = fgetc(fpin)) != ';') {
                                         arr += ch;
                                     }
                                     arr += ch;
                                     fprintf(fout, "%s", arr.c_str());
-                                    fprintf(fout, "%s", " //ÄúµÄ³ÌĞòÖĞÊ¹ÓÃÁËµİ¹éº¯Êı£¬Çë×¢Òâ¼ì²éÊÇ·ñµİ¹é´ÎÊı¹ı¶à¡£");
-                                    fseek(fpin, 1L, SEEK_CUR); //ÍË»ØÒ»¸ñ
+                                    fprintf(fout, "%s", " //æ‚¨çš„ç¨‹åºä¸­ä½¿ç”¨äº†é€’å½’å‡½æ•°ï¼Œè¯·æ³¨æ„æ£€æŸ¥æ˜¯å¦é€’å½’æ¬¡æ•°è¿‡å¤šã€‚");
+                                    fseek(fpin, 1L, SEEK_CUR); //é€€å›ä¸€æ ¼
                                 }
                                 else {
                                     fprintf(fout, "%s", arr.c_str());
                                 }
                             }
                             cout << endl;
-                            //ÓĞÎ´Öªbug,ĞèÒª´ËĞĞÎŞÆäËûĞè´¦ÀíĞÅÏ¢¡£                         
+                            //æœ‰æœªçŸ¥bug,éœ€è¦æ­¤è¡Œæ— å…¶ä»–éœ€å¤„ç†ä¿¡æ¯ã€‚                         
                         }                                         
                     }
                 }
-                else { //±êÊ¶·ûÎª±äÁ¿£¬ÏÈ¼ì²éÊÇ·ñÔÚÕ»ÉÏ£¨±êÊ¶·ûÏÂ¸ö×Ö·ûÎª[£©£¬ÈôÊÇ£¬¿´[]ÄÚÄÚÈİÊÇ·ñ´óÓÚ1024£¬ÈôÊÇ£¬Ôò·ÖÅäÆäµ½¶ÑÉÏ¡£
-                    // 2²»ÖªÎªºÎµÄ±êÊ¶·û£¬Õı³£±äÁ¿µÈ cout << IDENTIFIER_v << " " << arr << " ±êÊ¶·û-±äÁ¿" << endl; //±äÁ¿
-                    //´ËÊ±ch²»Îª£¨£¬´ó¸ÅÂÊÎª¡®£¬¡¯Õ»ÉÏĞ¡ÄÚ´æ ¡®=¡¯Õ¾ÉÏĞ¡ÄÚ´æ£¬»ò¶ÑÉÏ ¡®[¡¯Õ»ÉÏ£¬¿ÉÄÜ´óÄÚ´æ£¬´¦Àí
-                    if (ch == '[' && in_fuc) {  //ÔÚÕ»ÉÏ Ö±½Ó´¦Àíµ½]
+                else { //æ ‡è¯†ç¬¦ä¸ºå˜é‡ï¼Œå…ˆæ£€æŸ¥æ˜¯å¦åœ¨æ ˆä¸Šï¼ˆæ ‡è¯†ç¬¦ä¸‹ä¸ªå­—ç¬¦ä¸º[ï¼‰ï¼Œè‹¥æ˜¯ï¼Œçœ‹[]å†…å†…å®¹æ˜¯å¦å¤§äº1024ï¼Œè‹¥æ˜¯ï¼Œåˆ™åˆ†é…å…¶åˆ°å †ä¸Šã€‚
+                    // 2ä¸çŸ¥ä¸ºä½•çš„æ ‡è¯†ç¬¦ï¼Œæ­£å¸¸å˜é‡ç­‰ cout << IDENTIFIER_v << " " << arr << " æ ‡è¯†ç¬¦-å˜é‡" << endl; //å˜é‡
+                    //æ­¤æ—¶chä¸ä¸ºï¼ˆï¼Œå¤§æ¦‚ç‡ä¸ºâ€˜ï¼Œâ€™æ ˆä¸Šå°å†…å­˜ â€˜=â€™ç«™ä¸Šå°å†…å­˜ï¼Œæˆ–å †ä¸Š â€˜[â€™æ ˆä¸Šï¼Œå¯èƒ½å¤§å†…å­˜ï¼Œå¤„ç†
+                    if (ch == '[' && in_fuc) {  //åœ¨æ ˆä¸Š ç›´æ¥å¤„ç†åˆ°]
                         //arr += "";                   
 
                         string formula = "";
@@ -501,24 +501,24 @@ void analyse(FILE* fpin) {
                                 formula += ch;
                             }
                         }
-                        //fseek(fpin, -1L, SEEK_CUR); //ÍË»ØÒ»¸ñ,´¦Àí]
-                        num = deal_nokh_formula(formula); //´«Èë´¦Àí×Ö·û´®
+                        //fseek(fpin, -1L, SEEK_CUR); //é€€å›ä¸€æ ¼,å¤„ç†]
+                        num = deal_nokh_formula(formula); //ä¼ å…¥å¤„ç†å­—ç¬¦ä¸²
 
-                        cout << arr << " ËãÊõ¹«Ê½,ÆäÖµÎª:" << num <<endl;
-                        if (num > 1024) {  //Ô½½ç£¬Á¬Í¬]Ò»Æğ´¦Àí£¬·ÖÅäÖÁ¶ÑÉÏ,²¢¼ÇÂ¼ÖÁshift_var_name;
+                        cout << arr << " ç®—æœ¯å…¬å¼,å…¶å€¼ä¸º:" << num <<endl;
+                        if (num > 1024) {  //è¶Šç•Œï¼Œè¿åŒ]ä¸€èµ·å¤„ç†ï¼Œåˆ†é…è‡³å †ä¸Š,å¹¶è®°å½•è‡³shift_var_name;
                             shift_var_name.push_back(arr);
 
-                            arr.insert(0, "*"); //¼ÓÈë*·ûºÅ
+                            arr.insert(0, "*"); //åŠ å…¥*ç¬¦å·
                             arr += "= new ";
                             arr += last_state;
                             arr += "[";
                             arr += formula;
                             arr += "]";
                            
-                            cout << "±äÁ¿ËùÕ¼¿Õ¼ä¹ı´ó£¬ÒÑ·ÖÅäµ½¶ÑÉÏ£¡" << endl;
+                            cout << "å˜é‡æ‰€å ç©ºé—´è¿‡å¤§ï¼Œå·²åˆ†é…åˆ°å †ä¸Šï¼" << endl;
 
                         }
-                        else {  //²»Ô½½ç,»¹ÊÇÔ­À´µÄ±äÁ¿+[¹«Ê½]
+                        else {  //ä¸è¶Šç•Œ,è¿˜æ˜¯åŸæ¥çš„å˜é‡+[å…¬å¼]
                             arr += "[";
                             arr += formula;
                             arr += "]";
@@ -526,7 +526,7 @@ void analyse(FILE* fpin) {
                         fprintf(fout, "%s", arr.c_str());
                         continue;
                     }
-                    else if (in_state_p) { //¸Ã±äÁ¿ÎªÖ¸Õë£¬Ö±½Ó´¦Àíµ½£¬»ò;
+                    else if (in_state_p) { //è¯¥å˜é‡ä¸ºæŒ‡é’ˆï¼Œç›´æ¥å¤„ç†åˆ°ï¼Œæˆ–;
                         pointer.push_back(arr);
                         string pname = "";
                         bool pname_start = false;
@@ -549,39 +549,39 @@ void analyse(FILE* fpin) {
 
                         fprintf(fout, "%s", arr.c_str());
                     }
-                    else { //Õı³£±äÁ¿,Ö»Êä³ö±äÁ¿Ãû£¬[ºÍÆäÖĞËãÊ½ Ö®ºóÕı³£µ±×Ö·û´¦Àí
+                    else { //æ­£å¸¸å˜é‡,åªè¾“å‡ºå˜é‡åï¼Œ[å’Œå…¶ä¸­ç®—å¼ ä¹‹åæ­£å¸¸å½“å­—ç¬¦å¤„ç†
                        fprintf(fout, "%s", arr.c_str());
                     }
                 }
-                fprintf(fout, "%s", filter_str.c_str()); //Ğ´ÈëÖĞ¼äµÄ¹ıÂË·û´®£¬Õı³£Çé¿öÏÂ£¬Ö®ºóÍË»ØÒ»¸ñ£¬¿ªÊ¼´¦Àí¹ıÂË·ûºóµÄ£¨µÈ
-                fseek(fpin, -1L, SEEK_CUR); //ÍË»ØÒ»¸ñ
+                fprintf(fout, "%s", filter_str.c_str()); //å†™å…¥ä¸­é—´çš„è¿‡æ»¤ç¬¦ä¸²ï¼Œæ­£å¸¸æƒ…å†µä¸‹ï¼Œä¹‹åé€€å›ä¸€æ ¼ï¼Œå¼€å§‹å¤„ç†è¿‡æ»¤ç¬¦åçš„ï¼ˆç­‰
+                fseek(fpin, -1L, SEEK_CUR); //é€€å›ä¸€æ ¼
             }
         }
 
-        else if (IsDigit(ch)) {      //ÅĞ¶ÏÊÇ·ñÎªÊı×Ö
+        else if (IsDigit(ch)) {      //åˆ¤æ–­æ˜¯å¦ä¸ºæ•°å­—
             while (IsDigit(ch) || (ch == '.' && IsDigit(fgetc(fpin)))) {
                 arr += ch;
                 ch = fgetc(fpin);
             }
-            fseek(fpin, -1L, SEEK_CUR); //ÍùÇ°ÍËÒ»¸ñÊÇÒòÎªµÚ¶şÖÖÇé¿öch=.µ«ÊÇÏÂ¸ö²»ÎªÊı×Ö
-            //3ÕûĞÍÊı cout << CONSTANT << " " << arr << " ÕûĞÎÊı" << endl;
+            fseek(fpin, -1L, SEEK_CUR); //å¾€å‰é€€ä¸€æ ¼æ˜¯å› ä¸ºç¬¬äºŒç§æƒ…å†µch=.ä½†æ˜¯ä¸‹ä¸ªä¸ä¸ºæ•°å­—
+            //3æ•´å‹æ•° cout << CONSTANT << " " << arr << " æ•´å½¢æ•°" << endl;
             fprintf(fout, "%s", arr.c_str());
         }
 
-        else if (IsUpLetter(ch) || IsLowLetter(ch) || ch == '_') {  //ÅĞ¶Ï±êÖ¾·û£¬¿ªÍ·Îª´óĞ´    /TODO£ººóÃæ
+        else if (IsUpLetter(ch) || IsLowLetter(ch) || ch == '_') {  //åˆ¤æ–­æ ‡å¿—ç¬¦ï¼Œå¼€å¤´ä¸ºå¤§å†™    /TODOï¼šåé¢
             while (IsUpLetter(ch) || IsLowLetter(ch) || ch == '_' || IsDigit(ch)) {
                 arr += ch;
                 ch = fgetc(fpin);
             }
             fseek(fpin, -1L, SEEK_CUR);
             printf("%3d  ", CONSTANT);
-            //4 ±êÊ¶·û cout << arr << " ±êÊ¶·û" << endl;
+            //4 æ ‡è¯†ç¬¦ cout << arr << " æ ‡è¯†ç¬¦" << endl;
             fprintf(fout, "%s", arr.c_str());
         }      
 
         else if ((ch_num = IsOperator(ch)) != 0) {
             arr += ch;
-            //5 ÔËËã·û cout << ch_num << " " << arr << " ÔËËã·û" << endl;
+            //5 è¿ç®—ç¬¦ cout << ch_num << " " << arr << " è¿ç®—ç¬¦" << endl;
             if (ch_num == 63) { //*
                 if (in_state) {
                     in_state_p = true;
@@ -592,22 +592,22 @@ void analyse(FILE* fpin) {
         }
         else if ((ch_num = IsSeparater(ch)) != 0) {
             arr += ch;
-            //6 ·Ö¸ô·û cout << ch_num << " " << arr << " ·Ö¸ô·û" << endl;
+            //6 åˆ†éš”ç¬¦ cout << ch_num << " " << arr << " åˆ†éš”ç¬¦" << endl;
             //fprintf(fout, "%s", arr.c_str());
-            if (in_fuc) {  //Èô´¦ÓÚº¯ÊıÄÚ²¿
+            if (in_fuc) {  //è‹¥å¤„äºå‡½æ•°å†…éƒ¨
                 if (ch_num == 53) {
-                    left_kh_num++;  //º¯ÊıÄÚ£¬×ó´óÀ¨ºÅ+1
+                    left_kh_num++;  //å‡½æ•°å†…ï¼Œå·¦å¤§æ‹¬å·+1
                 }
                 else if (ch_num == 54) {
-                    right_kh_num++;   //º¯ÊıÄÚ£¬ÓÒ´óÀ¨ºÅ + 1
-                    if (right_kh_num == left_kh_num) {  //×ó´óÀ¨ºÅ==ÓÒ´óÀ¨ºÅÊıÄ¿£¬Ôòº¯Êı½áÊø
+                    right_kh_num++;   //å‡½æ•°å†…ï¼Œå³å¤§æ‹¬å· + 1
+                    if (right_kh_num == left_kh_num) {  //å·¦å¤§æ‹¬å·==å³å¤§æ‹¬å·æ•°ç›®ï¼Œåˆ™å‡½æ•°ç»“æŸ
                         in_fuc = false;
                         left_kh_num = 0;
                         right_kh_num = 0;
-                        cout << endl << "º¯Êı½áÊø:" << in_fuc_name << endl << endl;
+                        cout << endl << "å‡½æ•°ç»“æŸ:" << in_fuc_name << endl << endl;
                         in_fuc_name = "";
 
-                        if (!fuc_has_ret) { //º¯ÊıÎŞreturn,ÈôÓĞĞèÒªdeleteµÄ£¬ÔÚ}Ç°Ìí¼Ó´úÂë¡£
+                        if (!fuc_has_ret) { //å‡½æ•°æ— return,è‹¥æœ‰éœ€è¦deleteçš„ï¼Œåœ¨}å‰æ·»åŠ ä»£ç ã€‚
                             for (auto x: shift_var_name) {
                                 fprintf(fout, "%s", "    delete[]");
                                 fprintf(fout, "%s", x.c_str());
@@ -626,11 +626,11 @@ void analyse(FILE* fpin) {
                 }
             }
 
-            fprintf(fout, "%s", arr.c_str());  //Ğ´ÔÚ×îºó£¬ÁîĞèÒªdeleteµÄÔÚº¯Êı½áÊøµÄ}Ö®Ç°
+            fprintf(fout, "%s", arr.c_str());  //å†™åœ¨æœ€åï¼Œä»¤éœ€è¦deleteçš„åœ¨å‡½æ•°ç»“æŸçš„}ä¹‹å‰
         }
         else {
             arr += ch;
-            //7 ÎŞ·¨Ê¶±ğ×Ö·û cout << ch << " ÎŞ·¨Ê¶±ğµÄ×Ö·û£¡" << endl;
+            //7 æ— æ³•è¯†åˆ«å­—ç¬¦ cout << ch << " æ— æ³•è¯†åˆ«çš„å­—ç¬¦ï¼" << endl;
             fprintf(fout, "%s", arr.c_str());
         }
     }
@@ -638,19 +638,19 @@ void analyse(FILE* fpin) {
 }
 int main()
 {
-    char inFile[40] = "code.txt"; //Òª´¦Àí³ÌĞòÎÄ¼şµÄÂ·¾¶
-    fout = fopen("result.txt", "w"); //´¦ÀíºóµÄÎÄ¼ş£¬Ã¿´ÎÖ´ĞĞ¸üĞÂ
+    char inFile[40] = "code.txt"; //è¦å¤„ç†ç¨‹åºæ–‡ä»¶çš„è·¯å¾„
+    fout = fopen("result.txt", "w"); //å¤„ç†åçš„æ–‡ä»¶ï¼Œæ¯æ¬¡æ‰§è¡Œæ›´æ–°
     while (true) {
         // cin >> inFile;
         if ((fpin = fopen(inFile, "r")) != NULL)
             break;
         else {
-            cout << "ÎÄ¼şÃû´íÎó£¡" << endl;
-            cout << "ÇëÊäÈëÔ´ÎÄ¼şÃû£¨°üÀ¨Â·¾¶ºÍºó×º£©:";
+            cout << "æ–‡ä»¶åé”™è¯¯ï¼" << endl;
+            cout << "è¯·è¾“å…¥æºæ–‡ä»¶åï¼ˆåŒ…æ‹¬è·¯å¾„å’Œåç¼€ï¼‰:";
         }
 
     }
-    cout << "------´Ê·¨·ÖÎöÈçÏÂ------" << endl;
+    cout << "------è¯æ³•åˆ†æå¦‚ä¸‹------" << endl;
     analyse(fpin);
     return 0;
 }
