@@ -1,0 +1,39 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+int num[1024 * 1024];
+void f1() {
+	int *a= new int[1024*1024], *b= new int[1024*1024];
+	cout << "f1执行完毕" << endl;
+    delete[]a;
+    delete[]b;
+}
+void f2() {
+	char s1[20];
+	char s2[20];
+	char s3[20];
+	char* p1= s1 ;
+	char* p2= s2 ;
+	char* p3= s3 ;
+	fgets(s1,sizeof(s1),stdin);
+	strcpy_s(p2,sizeof(s2), s1);
+	scanf_s("%s", &s3,sizeof(s3));
+	strcat_s(p2,sizeof(s2) - strlen(s2) - 1, p3);
+	cout << s1 << endl << s2 << endl << s3 << endl;
+
+	cout << "f2执行完毕" << endl;
+}
+void f3(int a, int b, int c, int times) {
+	if (times <= 0){
+	    cout << "f3执行完毕" << endl;
+		return;
+	}
+	else
+		f3(a, b, c, times - 1); //您的程序中使用了递归函数，请注意检查是否递归次数过多。	
+}
+int main() {
+	f1();
+	f2();
+	f3(1, 2, 3, 100);
+	return 0;
+}
