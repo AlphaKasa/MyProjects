@@ -1,0 +1,11 @@
+﻿  计算器.cpp
+D:\Study\C语言程序\计算器\计算器.cpp(110,12): warning C4244: “return”: 从“int”转换到“float”，可能丢失数据
+D:\Study\C语言程序\计算器\计算器.cpp(115,21): warning C4305: “初始化”: 从“double”到“float”截断
+D:\Study\C语言程序\计算器\计算器.cpp(117,10): warning C4101: “s1”: 未引用的局部变量
+D:\Study\C语言程序\计算器\计算器.cpp(118,10): warning C4101: “buff”: 未引用的局部变量
+  正在生成代码
+  5 of 164 functions ( 3.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    4 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  计算器.vcxproj -> D:\Study\C语言程序\计算器\Release\计算器.exe
